@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { useNavigate } from "@tanstack/react-router";
 
 export const useAddItem = create((set) => ({
   product: 0,

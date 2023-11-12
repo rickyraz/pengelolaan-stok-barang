@@ -5,10 +5,9 @@ function Root() {
   return (
     <main>
       <Outlet />
-      <TanStackRouterDevtools position="top-right" />
+      {/* <TanStackRouterDevtools position="top-right" /> */}
     </main>
   );
 }
 
 export default Root;
-

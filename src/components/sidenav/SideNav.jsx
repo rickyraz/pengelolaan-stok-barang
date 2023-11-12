@@ -11,73 +11,62 @@ import { Separator } from "../ui/separator";
 import Logo from "@/components/main/logo/logo-dark.png";
 import { Link } from "@tanstack/react-router";
 
-type MenuStates = {
-  dashboard: boolean;
-  invoice: boolean;
-  my_apps: boolean;
-  subs: boolean;
-  // login: boolean;
-  // olt: {
-  //   host: boolean | string | unknown;
-  //   onu: boolean | string | unknown;
-  // };
-  // dasa: {
-  //   sasa: boolean | string | unknown;
-  //   sasaBB: boolean | string | unknown;
-  // };
-};
+// type MenuStates = {
+//   dashboard: boolean;
+//   invoice: boolean;
+//   my_apps: boolean;
+//   subs: boolean;
+//   login: boolean;
+//   olt: {
+//     host: boolean | string | unknown;
+//     onu: boolean | string | unknown;
+//   };
+//   dasa: {
+//     sasa: boolean | string | unknown;
+//     sasaBB: boolean | string | unknown;
+//   };
+// };
 
-type MenuItem = {
-  key: keyof MenuStates;
-  label: string;
-  icon: React.ReactNode;
-  subMenu?: SubMenuItem[];
-  search?: Record<string, unknown>;
-  activeOptions?: ActiveOptions;
-  divider?: boolean; // Tambahkan properti divider
-  menuTitle?: string; // Tambahkan properti menuTitle
-};
+// type MenuItem = {
+//   key: keyof MenuStates;
+//   label: string;
+//   icon: React.ReactNode;
+//   subMenu?: SubMenuItem[];
+//   search?: Record<string, unknown>;
+//   activeOptions?: ActiveOptions;
+//   divider?: boolean; // Tambahkan properti divider
+//   menuTitle?: string; // Tambahkan properti menuTitle
+// };
 
-interface ActiveOptions {
-  exact?: boolean;
-  includeHash?: boolean;
-  includeSearch?: boolean;
-}
+// interface ActiveOptions {
+//   exact?: boolean;
+//   includeHash?: boolean;
+//   includeSearch?: boolean;
+// }
 
-type SubMenuItem = {
-  key: string;
-  label: string;
-  to?: string;
-  search?: Record<string, unknown>;
-  activeOptions?: ActiveOptions;
-  subMenuV2?: SubMenuItemV2[];
-};
+// type SubMenuItem = {
+//   key: string;
+//   label: string;
+//   to?: string;
+//   search?: Record<string, unknown>;
+//   activeOptions?: ActiveOptions;
+//   subMenuV2?: SubMenuItemV2[];
+// };
 
-type SubMenuItemV2 = {
-  key: string;
-  label: string;
-  to: string;
-  search?: Record<string, unknown>;
-  activeOptions?: ActiveOptions;
-};
+// type SubMenuItemV2 = {
+//   key: string,
+//   label: string,
+//   to: string,
+//   search?: Record<string, unknown>,
+//   activeOptions?: ActiveOptions,
+// };
 
 function SideNav() {
   const [open, setOpen] = useState(true);
-  const [menuStates, setMenuStates] = useState<MenuStates>({
-    dashboard: false,
-    login: false,
-    // olt: {
-    //   host: false,
-    //   onu: false,
-    // },
-    // dasa: {
-    //   sasa: false,
-    //   sasaBB: false,
-    // },
-  });
+  const [menuStates, setMenuStates] = useState();
 
   // Fungsi untuk menampilkan atau menyembunyikan SubMenu
-  const handleSubMenuToggle = (menuItem: keyof MenuStates) => {
+  const handleSubMenuToggle = (menuItem) => {
     setMenuStates((prevMenuStates) => ({
       ...prevMenuStates,
       [menuItem]: !prevMenuStates[menuItem],
@@ -86,8 +75,8 @@ function SideNav() {
 
   // Fungsi untuk menampilkan atau menyembunyikan SubMenuV2
   const handleSubSubMenuToggle = (
-    menuItemKey: keyof MenuStates,
-    subMenuItemKey: keyof MenuStates["olt"] & string // Use a type assertion to force a string
+    menuItemKey,
+    subMenuItemKey // Use a type assertion to force a string
   ) => {
     setMenuStates((prevMenuStates) => {
       const updatedOlt = {
@@ -119,7 +108,7 @@ function SideNav() {
   //   });
   // };
 
-  const menuItems: MenuItem[] = [
+  const menuItems = [
     // {
     //   key: "dashboard",
     //   label: "Dashboard",
@@ -219,7 +208,7 @@ function SideNav() {
 
   return (
     <div className="flex">
-      <div className="md:w-64 xl:w-72 px-4 flex-col h-screen px-8 relative duration-300 border-r">
+      <div className="md:w-64 xl:w-72 flex-col h-screen px-8 relative duration-300 border-r">
         <div className="pt-8">
           {/* <div className="flex items-center justify-between">
             <a
@@ -328,10 +317,7 @@ function SideNav() {
                                   open === false ? "px-2 py-2" : "ml-4 px-3"
                                 } flex justify-between`}
                                 onClick={() =>
-                                  handleSubSubMenuToggle(
-                                    key,
-                                    subKey as "host" | "onu"
-                                  )
+                                  handleSubSubMenuToggle(key, subKey)
                                 }
                               >
                                 <div className="flex">

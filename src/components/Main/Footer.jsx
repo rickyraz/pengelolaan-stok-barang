@@ -1,8 +1,17 @@
+import Logo from "./logo/tjp.png";
+import {
+  faXTwitter,
+  faInstagram,
+  faFacebook,
+} from "@fortawesome/free-brands-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 function Footer() {
   return (
-    <footer className="text-sm py-8 bg-[#161D27] text-white">
+    <footer className="text-sm py-8 bg-green_light ">
       <div className="max-w-5xl mx-auto space-y-3">
-        <img src="/logo/logo-light.png" alt="logo" className="max-w-[135px]" />
+        <img src={Logo} alt="logo" className="max-w-[135px]" />
         <div className="w-1/3">
           <p className="font-semibold ">Address :</p>
           <p className="text-xs">
@@ -10,10 +19,17 @@ function Footer() {
             Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13810
           </p>
         </div>
-        <ul className="flex">
-          <li>X</li>
-          <li>Instagram</li>
-          <li>Facebook</li>
+        <ul className="flex space-x-4">
+          {/* <li>X</li> */}
+          <div className="px-1 hover:bg-blue-100/10 rounded cursor-pointer">
+            <FontAwesomeIcon icon={faXTwitter} />
+          </div>
+          <div className="px-1 hover:bg-blue-100/10 rounded cursor-pointer">
+            <FontAwesomeIcon icon={faInstagram} />
+          </div>
+          <div className="px-1 hover:bg-blue-100/10 rounded cursor-pointer">
+            <FontAwesomeIcon icon={faFacebook} />
+          </div>
         </ul>
       </div>
     </footer>

@@ -15,6 +15,21 @@ const config = {
     // Path to the Tremor module
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
+  theme: {
+    extend: {
+      colors: {
+        green_light: "#f6fcf5",
+        blue_soft: "#192432",
+        blue_accent: "#5992D9",
+        gold_accent: "#EDC997",
+        red_accent: "#B32420",
+      },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      },
+    },
+  },
 } satisfies Config;
 
 export default config;
+// "bg-blue-dark": "#161D28",

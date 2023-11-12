@@ -1,4 +1,6 @@
 import Payment from "./images/payment.png";
+import Csv from "./images/CSV.png";
+import Crm from "./images/CRM.png";
 
 function ChooseUs() {
   const chooseItems = [
@@ -10,7 +12,7 @@ function ChooseUs() {
         "Automated recurring & prepaid billing",
         "Multiple payment channels",
       ],
-      imageUrl: { Payment },
+      imageUrl: Payment,
     },
     {
       title: "Modern visuals and easy data export",
@@ -19,23 +21,21 @@ function ChooseUs() {
       features: [
         "Easy to read",
         "Export to CSV",
-        "Code completion with instant preview",
+        // "Code completion with instant preview",
       ],
-      imageUrl:
-        "https://images.pexels.com/photos/4220967/pexels-photo-4220967.jpeg",
+      imageUrl: Csv,
     },
     {
       title: "Operational management & control",
       description:
         "Work smarter, not harder. Automate and simplify your operations.",
       features: [
-        "CRM & customer portal",
-        "Scheduling",
-        "Helpdesk",
+        "CRM & Customer portal",
+        // "Scheduling",
+        // "Helpdesk",
         "Inventory management",
       ],
-      imageUrl:
-        "https://images.pexels.com/photos/4220967/pexels-photo-4220967.jpeg",
+      imageUrl: Crm,
     },
     // Tambahkan item lain di sini jika diperlukan
   ];
@@ -97,6 +97,7 @@ function ChooseItem({ title, description, features, imageUrl, orderLeft }) {
             className="object-contain max-h-96 w-full rounded-2xl"
             src={imageUrl}
             alt={title}
+            loading="lazy"
           />
         </div>
       </div>

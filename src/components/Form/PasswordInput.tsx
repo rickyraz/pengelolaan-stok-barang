@@ -10,7 +10,7 @@ export default function PasswordInput({
   placeholder = "",
   helperText,
   id,
-
+  type = "passwprd",
   readOnly = false,
   validation,
   ...rest

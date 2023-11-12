@@ -1,76 +1,80 @@
-import { useCart, useAddItem } from "@/store/useCart";
 import { useEffect } from "react";
-import { useNavigate, Router } from "@tanstack/react-router";
+import { useCart } from "@/store/useCart";
+import { useNavigate, Link } from "@tanstack/react-router";
 
 const Pricing = () => {
-  const addProduct = useAddItem((state) => state.addProductID);
+  useEffect(() => {
+    // Menggulir ke atas saat komponen Pricing dimuat
+    window.scrollTo(0, 0);
+  }, []); // Tambahkan array dependensi kosong
 
   return (
-    <section className=" pb-12 pt-16 bg-[#1c2431]">
-      {/* <button onClick={addProduct} className="bg-slate-300">
-        add
-      </button> */}
-
+    <section className=" pb-12 pt-16 bg-blue_soft">
       <div className="max-w-5xl mx-auto">
-        <div className=" mb-[60px] max-w-3xl mx-auto  lg:mb-20">
-          <h2 className="mb-4 text-3xl font-bold text-center  sm:text-4xl md:text-[40px] text-[#EDC997]">
+        <div className=" mb-[60px] max-w-4xl mx-auto  lg:mb-20">
+          <h2 className="mb-4 text-3xl font-bold text-center  sm:text-4xl md:text-[40px] text-blue_accent">
             Plans & Pricing
           </h2>
-          <p className="text-white  text-center ">
-            There are many variations of passages of Lorem Ipsum available but
-            the majority have suffered alteration in some form.
+          <p className="text-white text-center ">
+            {/* Discover Zenradius's ISP-ERP Plans & Pricing, offering three
+            feature-rich plans designed to meet your ISP's needs. Choose the
+            plan that aligns best with your goals and unlock the potential of
+            Zenradius to elevate your business. */}
+            Explore Zenradius's ISP-ERP Plans & Pricing, featuring three plans
+            tailored for your ISP.
+            <br /> Select the ideal plan to align with your goals and unleash
+            Zenradius's potential for business growth.
           </p>
         </div>
 
         <div className="flex space-x-4">
           <PricingCard
-            name={"Personal Plan"}
-            type="Personal"
+            name={"Basic Plan"}
+            type="Basic"
             price="RP 250.000"
-            subscription="month"
-            description="Perfect for using in a personal website or a client project."
+            subscription="month or billed annually"
+            description="Ideal for small ISPs seeking basic ERP capabilities for seamless management."
             buttonText="Subscribe Basic Plan"
-            productId={1}
           >
-            <List>1 User</List>
-            <List>All UI components</List>
-            <List>Lifetime access</List>
-            <List>Free updates</List>
-            <List>Use on 1 (one) project</List>
-            <List>3 Months support</List>
+            <List>100 User</List>
+            <List>15 Product</List>
+            <List>1 Payment Provider</List>
+            <List>Radius - NAS, User</List>
+            <List>Network Device</List>
+            <List>Standart Support</List>
           </PricingCard>
           <PricingCard
             name={"Business Plan"}
             type="Business"
             price="RP 550.000"
-            subscription="month"
-            description="Perfect for using in a personal website or a client project."
+            subscription="month or billed annually"
+            description="Ideal for mid-sized ISPs requiring advanced ERP tools for improved efficiency."
             buttonText="Subscribe Business Plan"
-            productId={2}
             active
           >
-            <List>5 User</List>
-            <List>All UI components</List>
-            <List>Lifetime access</List>
-            <List>Free updates</List>
-            <List>Use on31 (Three) project</List>
-            <List>4 Months support</List>
+            <List>350 User</List>
+            <List>40 Product</List>
+            <List>5 Payment Provider</List>
+
+            <List>+ OLT/ONU</List>
+            <List>+ Network Service</List>
+            <List>Priority Support</List>
           </PricingCard>
           <PricingCard
             name={"Enterprise Plan"}
             type="Enterprise"
             price="RP 1.150.000"
-            subscription="month"
-            description="Perfect for using in a personal website or a client project."
+            subscription="month or billed annually"
+            description="Designed for large ISPs needing a comprehensive ERP solution for network optimization."
             buttonText="Subscribe Enterprise Plan"
-            productId={3}
           >
-            <List>Unlimited User</List>
-            <List>All UI components</List>
-            <List>Lifetime access</List>
-            <List>Free updates</List>
-            <List>Unlimited project</List>
-            <List>12 Months support</List>
+            <List>650 User</List>
+            <List>100 Product</List>
+            <List>Unlimited Payment Provider</List>
+
+            <List>+ ODP & Homepass</List>
+            <List>+ Network IPAM & Sites</List>
+            <List>Enterprise Support</List>
           </PricingCard>
         </div>
       </div>
@@ -86,39 +90,20 @@ const PricingCard = ({
   subscription,
   buttonText,
   active,
-  productId,
 }) => {
   const navigate = useNavigate({ from: "/pricing" });
 
   const addToCart = useCart((state) => state.addToCart);
   const productsInCart = useCart((state) => state.products);
-  const isProductInCart = productsInCart.includes(productId);
+  // const isProductInCart = productsInCart.includes(productId);
   const removeFromCart = useCart((state) => state.removeFromCart);
-
-  const handleButtonClick = () => {
-    if (isProductInCart) {
-      removeFromCart(productId);
-    } else {
-      // Check if the cart is empty before adding a product
-      if (productsInCart.length === 0) {
-        addToCart(productId);
-        navigate({ to: "/order" });
-      } else {
-        // Display a message or handle the case where a product is already in the cart
-      }
-    }
-  };
-
-  // useEffect(() => {
-  //   if (isProductInCart) {
-  //     // Use useEffect to navigate when a product is in the cart
-  //     navigate({ to: "/order" });
-  //   }
-  // }, [isProductInCart]);
 
   return (
     <>
       <div className="w-full md:w-1/2 lg:w-1/3">
+        {/* <button onClick={removeFromCart} className="bg-red-900">
+          hapus
+        </button> */}
         <div className="relative z-10 px-8 py-10 mb-10 overflow-hidden bg-white border rounded-xl  border-opacity-20 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-8">
           <span className="block mb-4 text-lg font-semibold text-primary">
             {type}
@@ -131,26 +116,22 @@ const PricingCard = ({
             {description}
           </p>
           <ul className="mb-7">
-            <p className="mb-1 text-base leading-loose text-body-color">
+            <div className="mb-1 text-base leading-loose text-body-color">
               {children}
-            </p>
+            </div>
           </ul>
-          <a
-            onClick={handleButtonClick}
+          <Link
+            to="/order"
+            // onClick={handleButtonClick}
             className={`hover:cursor-pointer ${
               active
-                ? `w-full block text-base font-semibold text-white ${
-                    isProductInCart ? "bg-[#EDC997]" : "bg-blue-600"
-                  } border border-primary rounded-md text-center p-4 hover:bg-blue-700 transition`
-                : `block w-full rounded-md border border-[#c5d1f8] bg-transparent p-4 text-center text-base font-semibold ${
-                    isProductInCart
-                      ? "bg-[#EDC997] text-white"
-                      : "text-blue-950 hover:bg-blue-700"
-                  }  transition hover:border-blue-600 hover-bg-[#EDC997] `
+                ? `w-full block text-base font-semibold text-white bg-blue-600 border border-primary rounded-md text-center p-4 hover:bg-blue-700 transition`
+                : `block w-full rounded-md border border-[#c5d1f8] bg-transparent p-4 text-center text-base font-semibold 
+                     text-blue-950 hover:bg-blue-700 hover:text-white transition hover:border-blue-600  `
             }`}
           >
-            {isProductInCart ? "Remove from Cart" : buttonText}
-          </a>
+            {buttonText}
+          </Link>
           <div>
             <span className="absolute right-0 top-7 z-[-1]">
               <svg
@@ -419,9 +400,7 @@ const PricingCard = ({
 
 const List = ({ children }) => {
   return (
-    <>
-      <p className="mb-1 text-base leading-loose text-body-color">{children}</p>
-    </>
+    <p className="mb-1 text-base leading-loose text-body-color">{children}</p>
   );
 };
 
