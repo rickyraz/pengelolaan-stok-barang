@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Footer() {
   return (
-    <footer className="text-sm py-8 bg-green_light ">
+    <footer className="text-sm py-4 bg-green_light ">
       <div className="max-w-5xl mx-auto space-y-3">
         <img src={Logo} alt="logo" className="max-w-[135px]" />
         <div className="w-1/3">

@@ -1,15 +1,22 @@
 import { Router, Route, RootRoute, redirect } from "@tanstack/react-router";
 import useAuth from "@/store/useAuth";
+import Root from "./RootRouterWrapper";
+import Login from "@/pages/auth/Login";
+
 import Landing from "@/pages/LandingPage/app";
 import ClientArea from "@/pages/clientarea/ClientArea";
-import Root from "./RootRouterWrapper";
 import PricingPage from "@/pages/LandingPage/pricing/Pricing";
-import Login from "@/pages/auth/Login";
 import Order from "@/pages/LandingPage/order/Order";
 import ThxOrder from "@/pages/LandingPage/order/ThxOrder";
 
 import InvoiceDetail from "@/components/clientarea/InvoiceDetail";
 import SubsApp from "@/components/clientarea/SubsApp";
+
+import Team from "@/pages/apps/Team";
+import Customer from "@/pages/apps/Customer";
+import Product from "@/pages/apps/Product";
+import Sales from "@/pages/apps/Sales";
+import Vendor from "@/pages/apps/Vendor";
 
 // Root
 const rootRoute = new RootRoute({
@@ -42,28 +49,44 @@ const rootRoute = new RootRoute({
 //   component: ThxOrder,
 // });
 
+// const clientAreaRoute = new Route({
+//   getParentRoute: () => rootRoute,
+//   path: "/clientarea",
+//   component: ClientArea,
+// });
+
 const loginPage = new Route({
   getParentRoute: () => rootRoute,
-  path: "/login",
+  path: "/masuk",
   component: Login,
 });
 
-const clientAreaRoute = new Route({
+const timRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: "/clientarea",
-  component: ClientArea,
+  path: "/tim",
+  component: Team,
 });
 
-const invoiceClient = new Route({
-  getParentRoute: () => clientAreaRoute,
-  path: "/my-invoice",
-  component: InvoiceDetail,
+const productRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/produk",
+  component: Product,
 });
 
-const SubsClient = new Route({
-  getParentRoute: () => clientAreaRoute,
-  path: "/my-apps-and-subs",
-  component: SubsApp,
+const customerRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/pelanggan",
+  component: Customer,
+});
+const salesRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/penjualan",
+  component: Sales,
+});
+const vendorRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/vendor",
+  component: Vendor,
 });
 
 const privateLayout = new Route({
@@ -87,20 +110,14 @@ const privateLayout = new Route({
 // Create the router using your route tree
 export const router = new Router({
   routeTree: rootRoute.addChildren([
-    // indexRoute,
-    // pricingPage,
-    // orderPage,
-    // ThxPage,
     loginPage,
-    privateLayout.addChildren([
-      clientAreaRoute.addChildren([invoiceClient, SubsClient]),
-    ]),
+    timRoute,
+    productRoute,
+    customerRoute,
+    salesRoute,
+    vendorRoute,
+    // privateLayout.addChildren([
+    //   clientAreaRoute.addChildren([invoiceClient, SubsClient]),
+    // ]),
   ]),
 });
-
-// defaultPendingComponent: () => (
-//   <div className={`p-2 text-2xl`}>
-//     <p>Loading...</p>
-//   </div>
-// ),
-// defaultErrorComponent: ({ error }) => <div>error :{error}</div>,

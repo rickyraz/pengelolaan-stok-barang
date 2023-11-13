@@ -12,6 +12,53 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import useAuth from "@/store/useAuth";
+import SideNavHorz from "../sidenav/SideNavHorz";
+
+function Header() {
+  const { isLoggedIn, login, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  return (
+    <header className="text-sm py-2 bg-green_light">
+      <div className="flex justify-between max-w-5xl mx-auto items-center">
+        <Link to="/">
+          <img src={Logo} alt="logo" className="max-w-[185px]" />
+        </Link>
+        <p className="text-lg">
+          General Trading Company & Distribution Plastic
+        </p>
+        <NavigationMenus />
+
+        <div className="flex space-x-6">
+          {/* <button className="text-[#EDC997]">Register</button> */}
+          {isLoggedIn === true ? (
+            <button
+              className="text-center px-6 py-2 border transition-all duration-300  border-[#EDC997] hover:bg-white hover:text-[#1F2732] rounded-md  font-medium"
+              onClick={handleLogout}
+            >
+              Keluar
+            </button>
+          ) : (
+            // <Link to="/masuk">
+            //   <button className="text-center px-6 py-2 border transition-all duration-300 bg-orange-600 text-white   rounded-md  font-medium">
+            //     Masuk
+            //   </button>
+            // </Link>
+            <button
+              className="text-center px-6 py-2 border transition-all duration-300 bg-orange-600 text-white   rounded-md  font-medium"
+              onClick={handleLogout}
+            >
+              Keluar
+            </button>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
 
 const components = [
   {
@@ -38,15 +85,9 @@ const components = [
       "Take full control of your ISP network infrastructure. Manage network device configurations, performance monitoring, maintenance scheduling, and security.",
     // to: "/order",
   },
-  // {
-  //   title: "HRM",
-  //   description:
-  //     "Enhance your human resource management with our HRM service. Handle employee data, payroll, training, recruitment, and HR administration efficiently.",
-  //   to: "/order",
-  // },
 ];
 
-export function NavigationMenuDemo() {
+export function NavigationMenus() {
   return (
     <NavigationMenu>
       <NavigationMenuList className="flex space-x-8  items-center">
@@ -68,11 +109,15 @@ export function NavigationMenuDemo() {
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem> */}
+
         {/* <NavigationMenuItem>
-          <Link to="/pricing">Pricing</Link>
-        </NavigationMenuItem> */}
-        {/* <NavigationMenuItem>
-          <a href="">How to Order</a>
+          <Link to="/pricing">Toko</Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <a href="">Cara Memesan</a>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link to="/pricing">Tentang Kita</Link>
         </NavigationMenuItem> */}
         {/* <NavigationMenuItem>
           <a href="">Guide</a>
@@ -102,43 +147,5 @@ const ListItem = React.forwardRef(
     );
   }
 );
-
-function Header() {
-  const { isLoggedIn, login, logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-  };
-
-  return (
-    <header className="text-sm py-8 bg-green_light">
-      <div className="flex justify-between max-w-5xl mx-auto items-center">
-        <Link to="/">
-          <img src={Logo} alt="logo" className="max-w-[185px]" />
-        </Link>
-
-        <NavigationMenuDemo />
-
-        <div className="flex space-x-6">
-          {/* <button className="text-[#EDC997]">Register</button> */}
-          {isLoggedIn === true ? (
-            <button
-              className="text-center px-6 py-2 border transition-all duration-300  border-[#EDC997] hover:bg-white hover:text-[#1F2732] rounded-md  font-medium"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          ) : (
-            <Link to="/login">
-              <button className="text-center px-6 py-2 border transition-all duration-300  border-[#EDC997] hover:bg-white hover:text-[#1F2732] rounded-md  font-medium">
-                Login
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-    </header>
-  );
-}
 
 export default Header;

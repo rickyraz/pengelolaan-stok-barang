@@ -18,7 +18,7 @@ const config = {
   theme: {
     extend: {
       colors: {
-        green_light: "#f6fcf5",
+        green_light: "#ebfae8",
         blue_soft: "#192432",
         blue_accent: "#5992D9",
         gold_accent: "#EDC997",
