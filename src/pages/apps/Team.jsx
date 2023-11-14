@@ -1,254 +1,321 @@
 import Layout from "@/components/Layout";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+import { useState, useMemo } from "react";
+import supabase from "@/config/supabaseClient";
+import { useQuery } from "@tanstack/react-query";
+import V8TableContainer from "@/components/Table/V8TableContainer";
+import SearchAndFiltering from "@/components/aikyong_pages/Search";
 
 function Team() {
+  // Searching
+  const [searching, setSearching] = useState("");
+  const handleSearchChange = (value) => {
+    setSearching(value);
+  };
+  // Tim
+  const fetchTim = async () => {
+    const { data, error } = await supabase.from("login").select("*");
+    if (error) {
+      throw new Error("Could not fetch login");
+    }
+    return data;
+  };
+  const { data: dataTim, error: fetchError } = useQuery({
+    queryKey: ["login"],
+    queryFn: fetchTim,
+  });
+  // Column Tim
+  const columns = useMemo(
+    () => [
+      {
+        id: "email",
+        header: "Email",
+        accessorKey: "email", // accessor adalah "key" dalam data
+      },
+      {
+        id: "role",
+        header: "Role",
+        accessorKey: "role",
+        cell: (roles) => {
+          const rolesz = roles.row.original.role;
+
+          if (rolesz === 3) {
+            return <p>Super Admin</p>;
+          } else if (rolesz === 2) {
+            return <p>Admin</p>;
+          } else if (rolesz === 1) {
+            return <p>Sales</p>;
+          }
+          return <>{rolesz}</>;
+        },
+      },
+      {
+        id: "action",
+        header: "Action",
+        cell: (cellProps) => {
+          const idEachRow = cellProps.row.original.id;
+          return <DropdownAction ids={idEachRow} />;
+        },
+      },
+    ],
+    []
+  );
+
+  console.log("supabase", supabase);
+  console.log("dataTim", dataTim);
   return (
     <Layout>
-      <div className="antialiased font-sans ">
-        <div className="max-w-5xl mx-auto px-4 sm:px-8">
-          <div className="py-8">
-            <div>
-              <h2 className="text-2xl font-semibold leading-tight">Users</h2>
-            </div>
-            <div className="my-2 flex sm:flex-row flex-col">
-              <div className="flex flex-row mb-1 sm:mb-0">
-                <div className="relative">
-                  <select className="appearance-none h-full rounded-l border block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    <option>5</option>
-                    <option>10</option>
-                    <option>20</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg
-                      className="fill-current h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="relative">
-                  <select className="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                    <option>All</option>
-                    <option>Active</option>
-                    <option>Inactive</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg
-                      className="fill-current h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="block relative">
-                <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4 fill-current text-gray-500"
-                  >
-                    <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
-                  </svg>
-                </span>
-                <input
-                  placeholder="Search"
-                  className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
-                />
-              </div>
-            </div>
-            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-              <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                <table className="min-w-full leading-normal">
-                  <thead>
-                    <tr>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        User
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Rol
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Created at
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <img
-                              className="w-full h-full rounded-full"
-                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                              alt=""
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              Vera Carpenter
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p class="text-gray-900 whitespace-no-wrap">Admin</p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Jan 21, 2020
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                          ></span>
-                          <span className="relative">Activo</span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <img
-                              className="w-full h-full rounded-full"
-                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                              alt=""
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              Blake Bowman
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Editor
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Jan 01, 2020
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                          ></span>
-                          <span className="relative">Activo</span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <img
-                              className="w-full h-full rounded-full"
-                              src="https://images.unsplash.com/photo-1540845511934-7721dd7adec3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                              alt=""
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              Dana Moore
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Editor
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Jan 10, 2020
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-orange-200 opacity-50 rounded-full"
-                          ></span>
-                          <span className="relative">Suspended</span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-10 h-10">
-                            <img
-                              className="w-full h-full rounded-full"
-                              src="https://images.unsplash.com/photo-1522609925277-66fea332c575?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&h=160&w=160&q=80"
-                              alt=""
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              Alonzo Cox
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Admin
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          Jan 18, 2020
-                        </p>
-                      </td>
-                      <td className="px-5 py-5 bg-white text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
-                          ></span>
-                          <span className="relative">Inactive</span>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                  <span className="text-xs xs:text-sm text-gray-900">
-                    Showing 1 to 4 of 50 Entries
-                  </span>
-                  <div className="inline-flex mt-2 xs:mt-0">
-                    <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                      Prev
-                    </button>
-                    <button className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <p>{fetchError && `${fetchError}`}</p>
+      {dataTim && (
+        <div className="max-w-5xl mx-auto">
+          <HeaderPageAndAddProduct
+            data={dataTim}
+            namaHalaman="Tim"
+            desc="Berikut adalah daftar pengguna aplikasi ini."
+          />
+          <SearchAndFiltering
+            searching={searching}
+            setSearching={handleSearchChange}
+            placeholder="Cari Tim"
+          />
+          <V8TableContainer
+            data={dataTim}
+            columns={columns}
+            searching={searching}
+            setSearching={handleSearchChange}
+          />
         </div>
-      </div>
+      )}
     </Layout>
   );
 }
 
 export default Team;
+
+const DropdownAction = ({ data }) => {
+  return (
+    <div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          {/* <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button> */}
+          <button className="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+              />
+            </svg>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
+          {/* <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(payment.id)}
+          >
+            Lihat
+          </DropdownMenuItem> */}
+
+          <DropdownMenuItem>Hapus </DropdownMenuItem>
+          {/* <DropdownMenuItem>Update </DropdownMenuItem> */}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+};
+
+// HEADER + POPUP SETOR / TAMBAH
+
+const HeaderPageAndAddProduct = ({ data, namaHalaman, desc }) => {
+  return (
+    <div className="sm:flex sm:items-center sm:justify-between mt-12">
+      <div>
+        <div className="flex items-center gap-x-3">
+          <h2 className="text-lg font-medium text-gray-800 dark:text-white capitalize">
+            {namaHalaman}
+          </h2>
+
+          <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+            {data.length} pengguna
+          </span>
+        </div>
+
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">{desc}</p>
+      </div>
+
+      <div className="flex items-center mt-4 gap-x-3">
+        {/* <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_3098_154395)">
+              <path
+                d="M13.3333 13.3332L9.99997 9.9999M9.99997 9.9999L6.66663 13.3332M9.99997 9.9999V17.4999M16.9916 15.3249C17.8044 14.8818 18.4465 14.1806 18.8165 13.3321C19.1866 12.4835 19.2635 11.5359 19.0351 10.6388C18.8068 9.7417 18.2862 8.94616 17.5555 8.37778C16.8248 7.80939 15.9257 7.50052 15 7.4999H13.95C13.6977 6.52427 13.2276 5.61852 12.5749 4.85073C11.9222 4.08295 11.104 3.47311 10.1817 3.06708C9.25943 2.66104 8.25709 2.46937 7.25006 2.50647C6.24304 2.54358 5.25752 2.80849 4.36761 3.28129C3.47771 3.7541 2.70656 4.42249 2.11215 5.23622C1.51774 6.04996 1.11554 6.98785 0.935783 7.9794C0.756025 8.97095 0.803388 9.99035 1.07431 10.961C1.34523 11.9316 1.83267 12.8281 2.49997 13.5832"
+                stroke="currentColor"
+                stroke-width="1.67"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_3098_154395">
+                <rect width="20" height="20" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+
+          <span>Import</span>
+        </button> */}
+
+        <PopUpAddProduct namaHalaman={namaHalaman} />
+      </div>
+    </div>
+  );
+};
+
+function PopUpAddProduct({ namaHalaman, fungsi }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+
+          <span>Tambah {namaHalaman}</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Tambah Barang</DialogTitle>
+          <DialogDescription>
+            Tambah Barang yang sudah ada sebelumnya
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Kode Produk
+            </Label>
+            <Input
+              id="name"
+              // defaultValue="Pedro Duarte"
+              className="col-span-3"
+              type="text"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-left">
+              Nama Produk
+            </Label>
+            <Input
+              id="username"
+              // defaultValue="@peduarte"
+              className="col-span-3"
+              type="text"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-left">
+              Stok Produk
+            </Label>
+            <Input
+              id="username"
+              defaultValue="@peduarte"
+              className="col-span-3"
+              type="number"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-left">
+              Harga Jual
+            </Label>
+            <Input
+              id="username"
+              defaultValue="@peduarte"
+              className="col-span-3"
+              type="number"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type="submit">Tambah Barang</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function SelectProductAdd({ data }) {
+  return (
+    <Select>
+      <SelectTrigger className="min-w-[425px]">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Fruits</SelectLabel>
+          <SelectItem value="apple">Apple</SelectItem>
+          <SelectItem value="banana">Banana</SelectItem>
+          <SelectItem value="blueberry">Blueberry</SelectItem>
+          <SelectItem value="grapes">Grapes</SelectItem>
+          <SelectItem value="pineapple">Pineapple</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}

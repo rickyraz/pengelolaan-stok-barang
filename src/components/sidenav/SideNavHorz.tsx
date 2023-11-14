@@ -22,11 +22,12 @@ function SideNavHorz() {
       to: "/produk",
     },
     {
-      key: "tim",
-      label: "Tim",
-      icon: <Users />,
-      to: "/tim",
+      key: "vendor",
+      label: "Vendor",
+      icon: <Building2 />,
+      to: "/vendor",
     },
+
     {
       key: "pelanggan",
       label: "Pelanggan",
@@ -39,11 +40,12 @@ function SideNavHorz() {
       icon: <PercentCircle />,
       to: "/penjualan",
     },
+
     {
-      key: "vendor",
-      label: "Vendor",
-      icon: <Building2 />,
-      to: "/vendor",
+      key: "tim",
+      label: "Tim",
+      icon: <Users />,
+      to: "/tim",
     },
   ];
 

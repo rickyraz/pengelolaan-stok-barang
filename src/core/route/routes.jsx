@@ -14,7 +14,7 @@ import SubsApp from "@/components/clientarea/SubsApp";
 
 import Team from "@/pages/apps/Team";
 import Customer from "@/pages/apps/Customer";
-import Product from "@/pages/apps/Product";
+import Produk from "@/pages/apps/Product";
 import Sales from "@/pages/apps/Sales";
 import Vendor from "@/pages/apps/Vendor";
 
@@ -70,7 +70,7 @@ const timRoute = new Route({
 const productRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/produk",
-  component: Product,
+  component: Produk,
 });
 
 const customerRoute = new Route({
